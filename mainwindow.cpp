@@ -39,7 +39,6 @@ MainWindow::MainWindow(QWidget *parent)
     trayIconMenu->addAction(dndAction);
     trayIconMenu->addAction(exitAction);
 
-
     // create system tray icon and add menu to it
     auto sysTrayIcon = new QSystemTrayIcon(this);
     sysTrayIcon->setContextMenu(trayIconMenu);
@@ -57,7 +56,6 @@ MainWindow::MainWindow(QWidget *parent)
                show();
                CenterWindow(this);
                activateWindow();
-
            }
            if (isMinimized())
            {
@@ -108,7 +106,7 @@ void MainWindow::UpdateClock()
 
     // check if it is the beginning of the new hour and the window is not visible
     // also check to see if we are in DND mode
-    if (!dnd && s.endsWith("00") && !isVisible())
+    if (!dnd && s.endsWith("00:00") && !isVisible())
     {
         CenterWindow(this);
         show();
