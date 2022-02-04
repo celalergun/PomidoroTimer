@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="clock.ico">candy_clock.ico</file>
+        <file alias="shwup.wav">shwup.wav</file>
+    </qresource>
+</RCC>
