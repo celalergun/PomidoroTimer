@@ -29,12 +29,14 @@ public:
 private:
     Ui::MainWindow *ui;
     QTimer *timer = nullptr;
-    void updateClock();
+    QAction *dndAction;
+    void UpdateClock();
+    void DndClicked();
     bool closing;
     bool dnd;
 protected:
     void closeEvent(QCloseEvent*) override;
 private slots:
-    void on_pushButton_clicked();
+    void on_closeButton_clicked();
 };
 #endif // MAINWINDOW_H
