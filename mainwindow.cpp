@@ -52,6 +52,13 @@ void MainWindow::CreateMenus()
 
 void MainWindow::DisplayCustomEventWindow()
 {
+    bool wasHidden = false;
+    if (!this->isVisible())
+    {
+        wasHidden = true;
+        this->show();
+    }
+
     AddCustomEvent *addCustomEventWindow = new AddCustomEvent(this) ;
     auto result = addCustomEventWindow->exec();
     if (result == QDialog::Accepted)
@@ -64,6 +71,9 @@ void MainWindow::DisplayCustomEventWindow()
         customEventsMenu->setEnabled(true);
         customEventsList.append(time);
     }
+
+    if (wasHidden)
+        this->hide();
 }
 
 QMenu *MainWindow::CreateSystemTrayMenu()
