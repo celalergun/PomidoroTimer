@@ -13,6 +13,8 @@
 #include <QSoundEffect>
 #include <QStyle>
 #include <QWidget>
+#include <QList>
+#include "addcustomevent.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -31,12 +33,14 @@ private:
     QTimer *timer = nullptr;
     QAction *DndAction;
     QAction *CustomEventAction;
+    QMenu *customEventsMenu;
     void UpdateClock();
     void CreateMenus();
     QMenu *CreateSystemTrayMenu();
     void DisplayCustomEventWindow();
     bool closing;
     bool dnd;
+    QList<QString> customEventsList;
 protected:
     void closeEvent(QCloseEvent*) override;
 private slots:

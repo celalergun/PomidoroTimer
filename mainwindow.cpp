@@ -38,12 +38,32 @@ void MainWindow::CreateMenus()
     // create a system tray menu and add the items to the menu
     QMenu *trayIconMenu = CreateSystemTrayMenu();
     trayIconMenu->addAction(DndAction);
+    trayIconMenu->addSeparator();
+
+    // custom events
+    trayIconMenu->addAction(CustomEventAction);
+    customEventsMenu = trayIconMenu->addMenu("Custom events");
+    customEventsMenu->setEnabled(false);
+
+    // now we can add exit menu as the last item
+    trayIconMenu->addSeparator();
     trayIconMenu->addAction(exitAction);
 }
 
 void MainWindow::DisplayCustomEventWindow()
 {
-
+    AddCustomEvent *addCustomEventWindow = new AddCustomEvent(this) ;
+    auto result = addCustomEventWindow->exec();
+    if (result == QDialog::Accepted)
+    {
+        auto time = addCustomEventWindow->GetTime();
+        auto message = addCustomEventWindow->GetMessage();
+        auto caption = QString("%1->%2").arg(time, message);
+        QAction *addThis = new QAction(caption, this);
+        customEventsMenu->addAction(addThis);
+        customEventsMenu->setEnabled(true);
+        customEventsList.append(time);
+    }
 }
 
 QMenu *MainWindow::CreateSystemTrayMenu()
@@ -122,9 +142,11 @@ void MainWindow::UpdateClock()
     QString s = current.toString("HH:mm:ss");
     ui->lblClock->setText(s);
 
+    bool newHour = s.endsWith("00:00");
+    bool isInCustomEvents = customEventsList.indexOf(s) != -1;
     // check if it is the beginning of the new hour and the window is not visible
     // also check to see if we are in DND mode
-    if (!dnd && s.endsWith("00:00") && !isVisible())
+    if (!dnd && (newHour || isInCustomEvents) && !isVisible())
     {
         CenterWindow(this);
         show();
