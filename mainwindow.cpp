@@ -67,9 +67,10 @@ void MainWindow::DisplayCustomEventWindow()
         auto message = addCustomEventWindow->GetMessage();
         auto caption = QString("%1->%2").arg(time, message);
         QAction *addThis = new QAction(caption, this);
+        addThis->setStatusTip(message);
         customEventsMenu->addAction(addThis);
         customEventsMenu->setEnabled(true);
-        customEventsList.append(time);
+        customEventsList.append(std::make_pair(time, message));
     }
 
     if (wasHidden)
@@ -94,19 +95,19 @@ QMenu *MainWindow::CreateSystemTrayMenu()
     // system tray icon click responder
     connect(sysTrayIcon, &QSystemTrayIcon::activated, [this](auto reason)
     {
-       if (reason == QSystemTrayIcon::Trigger)
-       {
-           if (!isVisible())
-           {
-               show();
-               CenterWindow(this);
-               activateWindow();
-           }
-           if (isMinimized())
-           {
-               showNormal();
-           }
-       }
+        if (reason == QSystemTrayIcon::Trigger)
+        {
+            if (!isVisible())
+            {
+                show();
+                CenterWindow(this);
+                activateWindow();
+            }
+            if (isMinimized())
+            {
+                showNormal();
+            }
+        }
     });
     return trayIconMenu;
 }
@@ -153,13 +154,25 @@ void MainWindow::UpdateClock()
     ui->lblClock->setText(s);
 
     bool newHour = s.endsWith("00:00");
-    bool isInCustomEvents = customEventsList.indexOf(s) != -1;
+    bool isInCustomEvents = false;
+    QString message = "";
+    foreach(auto item, customEventsList)
+    {
+        if (item.first == s)
+        {
+            isInCustomEvents = true;
+            message = item.second;
+            break;
+        }
+    }
     // check if it is the beginning of the new hour and the window is not visible
     // also check to see if we are in DND mode
     if (!dnd && (newHour || isInCustomEvents) && !isVisible())
     {
+        ui->lblMessage->setText(message);
         CenterWindow(this);
         show();
+
         // load sound from resource
         QSoundEffect player(this);
         player.setSource(QUrl("qrc:/shwup.wav"));

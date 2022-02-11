@@ -14,6 +14,7 @@
 #include <QStyle>
 #include <QWidget>
 #include <QList>
+#include <QPair>
 #include "addcustomevent.h"
 
 QT_BEGIN_NAMESPACE
@@ -40,7 +41,7 @@ private:
     void DisplayCustomEventWindow();
     bool closing;
     bool dnd;
-    QList<QString> customEventsList;
+    QList<QPair<QString, QString>> customEventsList;
 protected:
     void closeEvent(QCloseEvent*) override;
 private slots:
