@@ -29,9 +29,12 @@ public:
 private:
     Ui::MainWindow *ui;
     QTimer *timer = nullptr;
-    QAction *dndAction;
+    QAction *DndAction;
+    QAction *CustomEventAction;
     void UpdateClock();
-    void DndClicked();
+    void CreateMenus();
+    QMenu *CreateSystemTrayMenu();
+    void DisplayCustomEventWindow();
     bool closing;
     bool dnd;
 protected:

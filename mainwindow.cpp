@@ -11,17 +11,8 @@ void CenterWindow(QMainWindow *w)
     w->move(sr.center() - wr.center());
 }
 
-
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+void MainWindow::CreateMenus()
 {
-    ui->setupUi(this);
-    // read icon from resource
-    auto icon = QIcon(":/clock.ico");
-    // remove window title and make it stay-on-top
-    setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
-
     // create a menu item for system tray icon
     auto exitAction = new QAction(tr("&Exit"), this);
     connect(exitAction, &QAction::triggered, [this]()
@@ -30,14 +21,38 @@ MainWindow::MainWindow(QWidget *parent)
         close();
     });
 
-    dndAction = new QAction(tr("&DND"), this);
-    dndAction->setCheckable(true);
-    connect(dndAction, &QAction::triggered, this, QOverload<>::of(&MainWindow::DndClicked));
+    DndAction = new QAction(tr("&DND"), this);
+    DndAction->setCheckable(true);
+    connect(DndAction, &QAction::triggered, [this]()
+    {
+        dnd = !dnd;
+        DndAction->setChecked(dnd);
+    });
 
-    // create system tray menu
-    auto trayIconMenu = new QMenu(this);
-    trayIconMenu->addAction(dndAction);
+    CustomEventAction = new QAction(tr("&Add custom event"), this);
+    connect(CustomEventAction, &QAction::triggered, [this]()
+    {
+        DisplayCustomEventWindow();
+    });
+
+    // create a system tray menu and add the items to the menu
+    QMenu *trayIconMenu = CreateSystemTrayMenu();
+    trayIconMenu->addAction(DndAction);
     trayIconMenu->addAction(exitAction);
+}
+
+void MainWindow::DisplayCustomEventWindow()
+{
+
+}
+
+QMenu *MainWindow::CreateSystemTrayMenu()
+{
+    // read icon from resource
+    auto icon = QIcon(":/clock.ico");
+
+    // create system tray main menu
+    auto trayIconMenu = new QMenu(this);
 
     // create system tray icon and add menu to it
     auto sysTrayIcon = new QSystemTrayIcon(this);
@@ -63,7 +78,18 @@ MainWindow::MainWindow(QWidget *parent)
            }
        }
     });
+    return trayIconMenu;
+}
 
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+    // remove window title and make it stay-on-top
+    setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
+
+    CreateMenus();
     // center window and update clock
     CenterWindow(this);
     UpdateClock();
@@ -76,21 +102,13 @@ MainWindow::MainWindow(QWidget *parent)
     timer->start(1000);
 }
 
-void MainWindow::DndClicked()
-{
-    dnd = !dnd;
-    dndAction->setChecked(dnd);
-}
-
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    // if we clicked on the Exit menu
-    if(closing)
+    if(closing) // check to see if we clicked on the Exit menu
     {
         event->accept();
     }
-    // otherwise just hide the window
-    else
+    else // otherwise just hide the window
     {
         this->hide();
         event->ignore();

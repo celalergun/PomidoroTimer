@@ -28,3 +28,6 @@ RESOURCES += \
 
 ICON += :clock.ico
 
+DISTFILES += \
+    candy_clock.ico
+
