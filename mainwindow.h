@@ -35,6 +35,7 @@ private:
     QAction *DndAction;
     QAction *CustomEventAction;
     QMenu *customEventsMenu;
+    QSystemTrayIcon *sysTrayIcon;
     void UpdateClock();
     void CreateMenus();
     QMenu *CreateSystemTrayMenu();
@@ -42,6 +43,7 @@ private:
     bool closing;
     bool dnd;
     QList<QPair<QString, QString>> customEventsList;
+    int firstWidth, firstHeight;
 protected:
     void closeEvent(QCloseEvent*) override;
 private slots:

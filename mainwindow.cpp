@@ -7,7 +7,7 @@ void CenterWindow(QMainWindow *w)
     const QRect sr = s->availableGeometry();
     const QRect wr({}, w->frameSize().boundedTo(sr.size()));
 
-    w->resize(wr.size());
+    //w->resize(wr.size());
     w->move(sr.center() - wr.center());
 }
 
@@ -70,7 +70,7 @@ void MainWindow::DisplayCustomEventWindow()
         addThis->setStatusTip(message);
         customEventsMenu->addAction(addThis);
         customEventsMenu->setEnabled(true);
-        customEventsList.append(std::make_pair(time, message));
+        customEventsList.append(QPair<QString, QString>(time, message));
     }
 
     if (wasHidden)
@@ -86,7 +86,7 @@ QMenu *MainWindow::CreateSystemTrayMenu()
     auto trayIconMenu = new QMenu(this);
 
     // create system tray icon and add menu to it
-    auto sysTrayIcon = new QSystemTrayIcon(this);
+    sysTrayIcon = new QSystemTrayIcon(this);
     sysTrayIcon->setContextMenu(trayIconMenu);
     sysTrayIcon->setIcon(icon);
     sysTrayIcon->setToolTip("Pomidoro timer");
@@ -131,6 +131,8 @@ MainWindow::MainWindow(QWidget *parent)
     dnd = false;
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&MainWindow::UpdateClock));
     timer->start(1000);
+    firstWidth = this->size().width();
+    firstHeight = this->size().height();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -143,6 +145,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     {
         this->hide();
         event->ignore();
+        sysTrayIcon->show();
     }
 }
 
@@ -172,6 +175,7 @@ void MainWindow::UpdateClock()
         ui->lblMessage->setText(message);
         CenterWindow(this);
         show();
+        sysTrayIcon->hide();
 
         // load sound from resource
         QSoundEffect player(this);
