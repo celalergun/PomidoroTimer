@@ -6,8 +6,6 @@ void CenterWindow(QMainWindow *w)
     QScreen* s= QGuiApplication::screens()[0];
     const QRect sr = s->availableGeometry();
     const QRect wr({}, w->frameSize().boundedTo(sr.size()));
-
-    //w->resize(wr.size());
     w->move(sr.center() - wr.center());
 }
 
@@ -100,6 +98,7 @@ QMenu *MainWindow::CreateSystemTrayMenu()
             if (!isVisible())
             {
                 show();
+                sysTrayIcon->hide();
                 CenterWindow(this);
                 activateWindow();
             }
@@ -143,9 +142,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
     else // otherwise just hide the window
     {
+        sysTrayIcon->show();
         this->hide();
         event->ignore();
-        sysTrayIcon->show();
     }
 }
 
@@ -196,6 +195,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_closeButton_clicked()
 {
+    sysTrayIcon->show();
     hide();
 }
 

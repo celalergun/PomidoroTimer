@@ -32,5 +32,6 @@ RESOURCES += \
 ICON += :clock.ico
 
 DISTFILES += \
+    README.md \
     candy_clock.ico
 
