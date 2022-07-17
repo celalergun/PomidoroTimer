@@ -141,6 +141,14 @@ MainWindow::MainWindow(QWidget *parent)
     timer->start(1000);
     firstWidth = this->size().width();
     firstHeight = this->size().height();
+    int currentHour = QDateTime::currentDateTime().time().hour();
+    if (currentHour < 12)
+        ui->lblMessage->setText("Good Morning!");
+    else if (currentHour < 17)
+        ui->lblMessage->setText("Good Afternoon!");
+    else
+        ui->lblMessage->setText("Good Evening!");
+
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
