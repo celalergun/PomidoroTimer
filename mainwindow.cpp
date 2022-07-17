@@ -27,6 +27,14 @@ void MainWindow::CreateMenus()
         DndAction->setChecked(dnd);
     });
 
+    MuteAction = new QAction(tr("&No sound"), this);
+    MuteAction->setCheckable(true);
+    connect(MuteAction, &QAction::triggered, [this]()
+    {
+        mute = !mute;
+        MuteAction->setChecked(mute);
+    });
+
     CustomEventAction = new QAction(tr("&Add custom event"), this);
     connect(CustomEventAction, &QAction::triggered, [this]()
     {
@@ -36,6 +44,7 @@ void MainWindow::CreateMenus()
     // create a system tray menu and add the items to the menu
     QMenu *trayIconMenu = CreateSystemTrayMenu();
     trayIconMenu->addAction(DndAction);
+    trayIconMenu->addAction(MuteAction);
     trayIconMenu->addSeparator();
 
     // custom events
@@ -177,13 +186,16 @@ void MainWindow::UpdateClock()
         sysTrayIcon->hide();
 
         // load sound from resource
-        QSoundEffect player(this);
-        player.setSource(QUrl("qrc:/shwup.wav"));
-        player.play();
-        // do not leave this method until the sound finishes
-        // if we leave the method before it finishes QSoundEffect will be destroyed and the sound will not be played
-        while (player.isPlaying())
-            QApplication::processEvents();
+        if (!mute)
+        {
+            QSoundEffect player(this);
+            player.setSource(QUrl("qrc:/shwup.wav"));
+            player.play();
+            // do not leave this method until the sound finishes
+            // if we leave the method before it finishes QSoundEffect will be destroyed and the sound will not be played
+            while (player.isPlaying())
+                QApplication::processEvents();
+        }
     }
 }
 

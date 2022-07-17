@@ -33,6 +33,7 @@ private:
     Ui::MainWindow *ui;
     QTimer *timer = nullptr;
     QAction *DndAction;
+    QAction *MuteAction;
     QAction *CustomEventAction;
     QMenu *customEventsMenu;
     QSystemTrayIcon *sysTrayIcon;
@@ -42,6 +43,7 @@ private:
     void DisplayCustomEventWindow();
     bool closing;
     bool dnd;
+    bool mute;
     QList<QPair<QString, QString>> customEventsList;
     int firstWidth, firstHeight;
 protected:

@@ -31,9 +31,9 @@
      <colorrole role="Window">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>255</red>
+        <red>128</red>
         <green>0</green>
-        <blue>255</blue>
+        <blue>128</blue>
        </color>
       </brush>
      </colorrole>
@@ -51,9 +51,9 @@
      <colorrole role="Window">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>255</red>
+        <red>128</red>
         <green>0</green>
-        <blue>255</blue>
+        <blue>128</blue>
        </color>
       </brush>
      </colorrole>
@@ -62,18 +62,18 @@
      <colorrole role="Base">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>255</red>
+        <red>128</red>
         <green>0</green>
-        <blue>255</blue>
+        <blue>128</blue>
        </color>
       </brush>
      </colorrole>
      <colorrole role="Window">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>255</red>
+        <red>128</red>
         <green>0</green>
-        <blue>255</blue>
+        <blue>128</blue>
        </color>
       </brush>
      </colorrole>
@@ -219,7 +219,7 @@
      </font>
     </property>
     <property name="text">
-     <string>...</string>
+     <string>Good Morning!</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
